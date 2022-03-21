@@ -1,0 +1,104 @@
+{
+  "name": "react-redux-bootstrap-task",
+  "version": "1.0.0",
+  "description": "The package shows how to use Redux-Thunk along with TypeScript language.",
+  "private": true,
+  "keywords": [
+    "js",
+    "typescript",
+    "webpack"
+  ],
+  "dependencies": {
+    "@types/is": "0.0.21",
+    "@types/node": "^16.11.19",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "axios": "^0.24.0",
+    "is_js": "^0.9.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.1",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.1",
+    "typescript": "^4.5.4"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --open",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack --mode development",
+    "stats": "cross-env STATS=server npm run build",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.2",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "autoprefixer": "^10.4.2",
+    "babel-jest": "^27.5.1",
+    "babel-loader": "^8.2.3",
+    "bootstrap": "^4.6.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.2.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.4.1",
+    "dotenv-webpack": "^7.0.3",
+    "eslint": "^8.7.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "jest-css-modules": "^2.1.0",
+    "lint-staged": "^12.3.1",
+    "mini-css-extract-plugin": "^2.5.2",
+    "node-sass": "^7.0.1",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.2.3",
+    "prettier": "2.5.1",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.0",
+    "ts-jest": "^27.1.3",
+    "webpack": "^5.67.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --fix",
+    "*.{ts,tsx,css,md}": "prettier --write"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx$",
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "jest-css-modules"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
+    "setupFilesAfterEnv": [
+      "./setupTests.ts"
+    ]
+  }
+}
