@@ -1,14 +1,14 @@
-import { combineReducers, Reducer } from "redux";
-import authReducer, { AuthState } from "./auth/reducers";
-import noteReducer, { NoteState } from "./notes/reducers";
+import { NoteStore } from "./NoteStore";
+import { AuthStore } from "./AuthStore";
 
-export interface ApplicationState {
-  note: NoteState;
-  auth: AuthState;
+export class RootStore {
+  public noteStore: NoteStore;
+  public authStore: AuthStore;
+
+  constructor() {
+    this.authStore = new AuthStore();
+    this.noteStore = new NoteStore(this);
+  }
 }
 
-export const reducers: Reducer<ApplicationState> =
-  combineReducers<ApplicationState>({
-    note: noteReducer,
-    auth: authReducer,
-  });
+export default new RootStore();

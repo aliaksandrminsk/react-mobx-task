@@ -1,31 +1,26 @@
 import React, { Component, ReactChild, ReactChildren } from "react";
-import { connect } from "react-redux";
-import { ApplicationState } from "../../store";
 import Menu from "../../components/Menu/Menu";
+import { AuthStore } from "../../store/AuthStore";
+import { inject, observer } from "mobx-react";
 
-interface StateProps {
-  isAuthenticated: boolean;
-  userName: string;
-}
+type StoreProps = {
+  authStore: AuthStore;
+};
 
-interface OwnProps {
+interface Props extends StoreProps {
   children: ReactChild | ReactChildren;
 }
 
-function mapStateToProps(state: ApplicationState): StateProps {
-  return {
-    isAuthenticated: !!state.auth.token,
-    userName: state.auth.userName,
-  };
-}
-
-class Layout extends Component<StateProps & OwnProps> {
+@inject("authStore")
+@observer
+class Layout extends Component<Props> {
+  static defaultProps = {} as StoreProps;
   render() {
     return (
       <>
         <Menu
-          isAuthenticated={this.props.isAuthenticated}
-          userName={this.props.userName}
+          isAuthenticated={this.props.authStore.isAuthenticated}
+          userName={this.props.authStore.userName}
         />
         <main>{this.props.children}</main>
       </>
@@ -33,4 +28,4 @@ class Layout extends Component<StateProps & OwnProps> {
   }
 }
 
-export default connect(mapStateToProps)(Layout);
+export default Layout;

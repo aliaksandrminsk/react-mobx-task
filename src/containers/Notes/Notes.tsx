@@ -1,25 +1,16 @@
 import React, { Component } from "react";
-import { ThunkDispatch } from "redux-thunk";
 import classes from "./Notes.module.css";
-import {
-  addNote,
-  fetchNotes,
-  saveNotes,
-  setFilter,
-} from "../../store/notes/actions";
-import { connect } from "react-redux";
 import Loader from "../../components/UI/Loader/Loader";
-import { ApplicationState } from "../../store";
-import { INote } from "../../store/notes/reducers";
 import { isEqual } from "../../lib/isEqual";
 import { FilterTypes } from "./FilterTypes";
 import NoteTable from "./NoteTable";
-import { NoteAction } from "../../store/notes/actionTypes";
+import { INote, NoteStore } from "../../store/NoteStore";
+import { inject, observer } from "mobx-react";
 
 interface State {
   newNoteText: string;
 }
-
+/*
 interface DispatchProps {
   fetchNotes: () => void;
   saveNotes: () => void;
@@ -56,12 +47,19 @@ function mapDispatchToProps(
     addNote: (note: INote) => dispatch(addNote(note)),
     setFilter: (filter: string) => dispatch(setFilter(filter)),
   };
-}
+}*/
 
-class Notes extends Component<Props, State> {
+type StoreProps = {
+  noteStore: NoteStore;
+};
+
+@inject("noteStore")
+@observer
+class Notes extends Component<StoreProps, State> {
   noteCounter = 0; //This counter uses to make unique id when we are creating new note.
+  static defaultProps = {} as StoreProps;
 
-  constructor(props: Props) {
+  constructor(props: StoreProps) {
     super(props);
     this.state = {
       newNoteText: "",
@@ -69,7 +67,7 @@ class Notes extends Component<Props, State> {
   }
 
   getFilteredNotes = (filter: string): Array<INote> => {
-    return this.props.updatedNotes.filter((value) => {
+    return this.props.noteStore.updatedNotes.filter((value) => {
       if (filter === FilterTypes.COMPLETED) {
         return value.done;
       } else if (filter === FilterTypes.WAITING) {
@@ -81,17 +79,17 @@ class Notes extends Component<Props, State> {
 
   onAddNoteHandler = () => {
     const note: INote = {
-      id: "id" + (this.props.notes.length + this.noteCounter),
+      id: "id" + (this.props.noteStore.notes.length + this.noteCounter),
       text: this.state.newNoteText,
       done: false,
     };
-    this.props.addNote(note);
+    this.props.noteStore.addNote(note);
     this.setState({ newNoteText: "" });
     this.noteCounter++;
   };
 
   componentDidMount() {
-    this.props.fetchNotes();
+    return this.props.noteStore.fetchNotes();
   }
 
   render() {
@@ -109,11 +107,14 @@ class Notes extends Component<Props, State> {
                 type="radio"
                 name="filterRadio"
                 id="filterRadio1"
-                onChange={this.props.setFilter.bind(this, FilterTypes.All)}
-                checked={this.props.filter === FilterTypes.All}
+                onChange={this.props.noteStore.setFilter.bind(
+                  this,
+                  FilterTypes.All
+                )}
+                checked={this.props.noteStore.filter === FilterTypes.All}
               />
               <label className="form-check-label" htmlFor="filterRadio1">
-                All ({this.props.updatedNotes.length})
+                All ({this.props.noteStore.updatedNotes.length})
               </label>
             </div>
             <br />
@@ -123,11 +124,11 @@ class Notes extends Component<Props, State> {
                 type="radio"
                 name="filterRadio"
                 id="filterRadio2"
-                onChange={this.props.setFilter.bind(
+                onChange={this.props.noteStore.setFilter.bind(
                   this,
                   FilterTypes.COMPLETED
                 )}
-                checked={this.props.filter === FilterTypes.COMPLETED}
+                checked={this.props.noteStore.filter === FilterTypes.COMPLETED}
               />
               <label className="form-check-label" htmlFor="filterRadio2">
                 Completed ({completedNotesCount})
@@ -140,23 +141,28 @@ class Notes extends Component<Props, State> {
                 type="radio"
                 name="filterRadio"
                 id="filterRadio3"
-                onChange={this.props.setFilter.bind(this, FilterTypes.WAITING)}
-                checked={this.props.filter === FilterTypes.WAITING}
+                onChange={this.props.noteStore.setFilter.bind(
+                  this,
+                  FilterTypes.WAITING
+                )}
+                checked={this.props.noteStore.filter === FilterTypes.WAITING}
               />
               <label className="form-check-label" htmlFor="filterRadio3">
-                Waiting ({this.props.updatedNotes.length - completedNotesCount})
+                Waiting (
+                {this.props.noteStore.updatedNotes.length - completedNotesCount}
+                )
               </label>
             </div>
           </div>
 
           <br />
-          {this.props.errorMessage ? (
+          {this.props.noteStore.errorMessage ? (
             <h4 className="text-danger d-flex justify-content-center mb-4">
-              {this.props.errorMessage}
+              {this.props.noteStore.errorMessage}
             </h4>
           ) : null}
 
-          {this.props.loading ? (
+          {this.props.noteStore.loading ? (
             <Loader />
           ) : (
             <NoteTable getFilteredNotes={this.getFilteredNotes} />
@@ -190,9 +196,12 @@ class Notes extends Component<Props, State> {
           <div className="d-flex justify-content-center">
             <button
               type="button"
-              onClick={this.props.saveNotes.bind(this)}
+              onClick={this.props.noteStore.saveNotes.bind(this)}
               className={"btn btn-primary " + classes.saveButton}
-              disabled={isEqual(this.props.notes, this.props.updatedNotes)}
+              disabled={isEqual(
+                this.props.noteStore.notes,
+                this.props.noteStore.updatedNotes
+              )}
             >
               Save notes
             </button>
@@ -204,4 +213,5 @@ class Notes extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notes);
+//export default connect(mapStateToProps, mapDispatchToProps)(Notes);
+export default Notes;

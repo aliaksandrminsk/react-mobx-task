@@ -1,27 +1,32 @@
 import React from "react";
 import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
-import { connect } from "react-redux";
-import { auth } from "../../store/auth/actions";
 import { IFormControls } from "./IFormControl";
 import { Form } from "./Form";
-import { ThunkDispatch } from "redux-thunk";
-import { ApplicationState } from "../../store";
-import { AuthAction } from "../../store/auth/actionTypes";
+import { inject, observer } from "mobx-react";
+import { AuthStore } from "../../store/AuthStore";
 
-interface DispatchProps {
-  auth: (email: string, password: string) => Promise<void>;
-}
+// interface DispatchProps {
+//   auth: (email: string, password: string) => Promise<void>;
+// }
+//
+// function mapDispatchToProps(
+//   dispatch: ThunkDispatch<ApplicationState, unknown, AuthAction>
+// ): DispatchProps {
+//   return {
+//     auth: (email: string, password: string) => dispatch(auth(email, password)),
+//   };
+// }
 
-function mapDispatchToProps(
-  dispatch: ThunkDispatch<ApplicationState, unknown, AuthAction>
-): DispatchProps {
-  return {
-    auth: (email: string, password: string) => dispatch(auth(email, password)),
-  };
-}
+type StoreProps = {
+  authStore: AuthStore;
+};
 
-class LoginForm extends Form<DispatchProps, IFormControls> {
+@inject("authStore")
+@observer
+class LoginForm extends Form<StoreProps, IFormControls> {
+  static defaultProps = {} as StoreProps;
+
   state = {
     isFormValid: false,
     serverErrorMessage: "",
@@ -54,7 +59,7 @@ class LoginForm extends Form<DispatchProps, IFormControls> {
   };
 
   loginHandler = () =>
-    this.props
+    this.props.authStore
       .auth(
         this.state.formControls.email.value,
         this.state.formControls.password.value
@@ -107,4 +112,4 @@ class LoginForm extends Form<DispatchProps, IFormControls> {
   }
 }
 
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default LoginForm;

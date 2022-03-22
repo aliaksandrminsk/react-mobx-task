@@ -1,23 +1,18 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { logout } from "../../store/auth/actions";
-import { Dispatch } from "redux";
 import { Navigate } from "react-router-dom";
-import { AuthLogoutAction } from "../../store/auth/actionTypes";
+import { inject, observer } from "mobx-react";
+import { AuthStore } from "../../store/AuthStore";
 
-interface DispatchProps {
-  logout: () => AuthLogoutAction;
-}
+type StoreProps = {
+  authStore: AuthStore;
+};
 
-function mapDispatchToProps(dispatch: Dispatch) {
-  return {
-    logout: () => dispatch(logout()),
-  };
-}
-
-class Logout extends Component<DispatchProps> {
+@inject("authStore")
+@observer
+class Logout extends Component<StoreProps> {
+  static defaultProps = {} as StoreProps;
   componentDidMount() {
-    return this.props.logout();
+    return this.props.authStore.logout();
   }
 
   render() {
@@ -25,4 +20,4 @@ class Logout extends Component<DispatchProps> {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Logout);
+export default Logout;

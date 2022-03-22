@@ -38,7 +38,10 @@ const babelOptions = () => {
       "@babel/preset-typescript",
       "@babel/preset-react",
     ],
-    plugins: ["@babel/plugin-proposal-class-properties"],
+    plugins: [
+      ["@babel/plugin-proposal-decorators", { legacy: true }],
+      "@babel/plugin-proposal-class-properties",
+    ],
   };
 };
 
@@ -87,7 +90,7 @@ module.exports = {
     publicPath: "/",
   },
   resolve: {
-    extensions: [".js", ".ts", ".tsx", ".json", ".scss", ".css"]
+    extensions: [".js", ".ts", ".tsx", ".json", ".scss", ".css"],
   },
   optimization: optimization(),
   devServer: {

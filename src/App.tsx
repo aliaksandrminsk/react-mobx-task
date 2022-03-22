@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import Layout from "./hoc/Layout/Layout";
 import { Route, Routes } from "react-router-dom";
-import { connect } from "react-redux";
 import LoginForm from "./containers/Auth/LoginForm";
 import RegisterForm from "./containers/Auth/RegisterForm";
-import { autoLogin } from "./store/auth/actions";
-import { ThunkDispatch } from "redux-thunk";
 import Notes from "./containers/Notes/Notes";
-import Logout from "./components/Logout/Logout";
 import { Navigate } from "react-router-dom";
-import { ApplicationState } from "./store";
-import { AnyAction } from "redux";
+import { inject, IWrappedComponent, observer } from "mobx-react";
+import { AuthStore } from "./store/AuthStore";
+import Logout from "./components/Logout/Logout";
 
+/*
 interface DispatchProps {
   autoLogin: () => Promise<void>;
 }
@@ -34,11 +32,19 @@ function mapDispatchToProps(
   return {
     autoLogin: () => dispatch(autoLogin()),
   };
-}
+}*/
 
-class App extends Component<DispatchProps & StateProps> {
+type StoreProps = {
+  authStore: AuthStore;
+};
+
+@inject("authStore")
+@observer
+class App extends Component<StoreProps> {
+  static defaultProps = {} as StoreProps;
+
   componentDidMount() {
-    return this.props.autoLogin();
+    this.props.authStore.autoLogin();
   }
 
   render() {
@@ -50,7 +56,7 @@ class App extends Component<DispatchProps & StateProps> {
       </Routes>
     );
 
-    if (this.props.isAuthenticated) {
+    if (this.props.authStore.isAuthenticated) {
       routes = (
         <Routes>
           <Route path="list" element={<Notes />} />
@@ -59,9 +65,8 @@ class App extends Component<DispatchProps & StateProps> {
         </Routes>
       );
     }
-
     return <Layout>{routes}</Layout>;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App as typeof App & IWrappedComponent<StoreProps>;

@@ -1,33 +1,39 @@
 import React from "react";
 import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
-import { connect } from "react-redux";
-import { auth } from "../../store/auth/actions";
 import { IFormControls } from "./IFormControl";
 import { Form } from "./Form";
-import { ThunkDispatch } from "redux-thunk";
-import { ApplicationState } from "../../store";
-import { AuthAction } from "../../store/auth/actionTypes";
+import { inject, observer } from "mobx-react";
+import { AuthStore } from "../../store/AuthStore";
 
-interface DispatchProps {
-  auth: (
-    email: string,
-    password: string,
-    name: string,
-    surname: string
-  ) => Promise<void>;
-}
+//interface DispatchProps {
+//authStore: AuthStore;
+// auth: (
+//   email: string,
+//   password: string,
+//   name: string,
+//   surname: string
+// ) => Promise<void>;
+//}
+//
+// function mapDispatchToProps(
+//   dispatch: ThunkDispatch<ApplicationState, unknown, AuthAction>
+// ): DispatchProps {
+//   return {
+//     auth: (email: string, password: string, name: string, surname: string) =>
+//       dispatch(auth(email, password, name, surname)),
+//   };
+// }
 
-function mapDispatchToProps(
-  dispatch: ThunkDispatch<ApplicationState, unknown, AuthAction>
-): DispatchProps {
-  return {
-    auth: (email: string, password: string, name: string, surname: string) =>
-      dispatch(auth(email, password, name, surname)),
-  };
-}
+type StoreProps = {
+  authStore: AuthStore;
+};
 
-class RegisterForm extends Form<DispatchProps, IFormControls> {
+@inject("authStore")
+@observer
+class RegisterForm extends Form<StoreProps, IFormControls> {
+  static defaultProps = {} as StoreProps;
+
   state = {
     isFormValid: false,
     serverErrorMessage: "",
@@ -77,7 +83,7 @@ class RegisterForm extends Form<DispatchProps, IFormControls> {
   };
 
   registerHandler = () =>
-    this.props
+    this.props.authStore
       .auth(
         this.state.formControls.email.value,
         this.state.formControls.password.value,
@@ -126,4 +132,4 @@ class RegisterForm extends Form<DispatchProps, IFormControls> {
   }
 }
 
-export default connect(null, mapDispatchToProps)(RegisterForm);
+export default RegisterForm;
