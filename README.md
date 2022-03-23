@@ -5,17 +5,11 @@ This project is a to-do list with authorization. Technologies: [MobX](https://mo
 To run the package.
 
 ```
-git clone https://github.com/aliaksandrminsk/react-redux-bootstrap-task.git
-cd react-redux-bootstrap-task
+git clone https://github.com/aliaksandrminsk/react-mobx-task.git
+cd react-mobx-task
 npm install
 npm run start
 ```
 
-To run tests.
-
-```
-npm run test
-```
-
-[React-Redux-Thunk Example
-](https://react-redux-bootstrap-task.web.app/)
+[React-MobX Example
+](https://react-mobx-task.web.app/)
