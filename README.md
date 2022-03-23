@@ -1,6 +1,6 @@
-# React-Redux-Thunk Example
+# React-MobX Example
 
-This project is a to-do list with authorization. Technologies: [Redux-Thunk](https://github.com/reduxjs/redux-thunk/), [TypeScript](https://www.typescriptlang.org/), [Webpack](https://webpack.js.org/), [Bootstrap](https://getbootstrap.com/) and [React Testing Library](https://testing-library.com/).
+This project is a to-do list with authorization. Technologies: [MobX](https://mobx.js.org/README.html), [TypeScript](https://www.typescriptlang.org/) and [Webpack](https://webpack.js.org/).
 
 To run the package.
 
