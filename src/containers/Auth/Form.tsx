@@ -1,9 +1,19 @@
-import { IFormControl, IFormControls, IValidation } from "./IFormControl";
+import { IFormControls, IFormControl, IValidation } from "./IFormControls";
 import is from "is_js";
 import React, { Component } from "react";
 import Input, { InputProps } from "../../components/UI/Input/Input";
+import { AuthStore } from "../../store/AuthStore";
+import { runInAction } from "mobx";
+import { FormStore } from "../../store/FormStore";
 
-export class Form<T, P extends IFormControls> extends Component<T, P> {
+type StoreProps = {
+  authStore: AuthStore;
+  formStore: FormStore;
+};
+
+export class Form extends Component<StoreProps> {
+  static defaultProps = {} as StoreProps;
+
   submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
   };
@@ -34,8 +44,8 @@ export class Form<T, P extends IFormControls> extends Component<T, P> {
     event: React.ChangeEvent<HTMLInputElement>,
     controlName: string
   ) => {
-    const formControls: { [key: string]: IFormControl } = {
-      ...this.state.formControls,
+    const formControls: IFormControls = {
+      ...this.props.formStore.formControls,
     };
 
     const control: IFormControl = { ...formControls[controlName] };
@@ -58,17 +68,21 @@ export class Form<T, P extends IFormControls> extends Component<T, P> {
       }
     });
 
-    this.setState({
-      ...this.state,
-      serverErrorMessage: "",
-      formControls,
-      isFormValid,
+    // this.setState({
+    //...this.state,
+    //serverErrorMessage: "",
+    //formControls,
+    //isFormValid,
+    //});
+    runInAction(() => {
+      this.props.formStore.isFormValid = isFormValid;
+      this.props.formStore.serverErrorMessage = "";
+      this.props.formStore.formControls = formControls;
     });
   };
 
   renderInputs() {
-    const formControls: { [key: string]: IFormControl } =
-      this.state.formControls;
+    const formControls = this.props.formStore.formControls;
     return Object.keys(formControls).map((controlName, index) => {
       const control: IFormControl = formControls[controlName];
 

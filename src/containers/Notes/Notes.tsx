@@ -7,9 +7,9 @@ import NoteTable from "./NoteTable";
 import { INote, NoteStore } from "../../store/NoteStore";
 import { inject, observer } from "mobx-react";
 
-interface State {
-  newNoteText: string;
-}
+// interface State {
+//   newNoteText: string;
+// }
 /*
 interface DispatchProps {
   fetchNotes: () => void;
@@ -55,16 +55,9 @@ type StoreProps = {
 
 @inject("noteStore")
 @observer
-class Notes extends Component<StoreProps, State> {
+class Notes extends Component<StoreProps> {
   noteCounter = 0; //This counter uses to make unique id when we are creating new note.
   static defaultProps = {} as StoreProps;
-
-  constructor(props: StoreProps) {
-    super(props);
-    this.state = {
-      newNoteText: "",
-    };
-  }
 
   getFilteredNotes = (filter: string): Array<INote> => {
     return this.props.noteStore.updatedNotes.filter((value) => {
@@ -80,11 +73,11 @@ class Notes extends Component<StoreProps, State> {
   onAddNoteHandler = () => {
     const note: INote = {
       id: "id" + (this.props.noteStore.notes.length + this.noteCounter),
-      text: this.state.newNoteText,
+      text: this.props.noteStore.newNoteText,
       done: false,
     };
     this.props.noteStore.addNote(note);
-    this.setState({ newNoteText: "" });
+    this.props.noteStore.updateNewNoteText("");
     this.noteCounter++;
   };
 
@@ -177,8 +170,10 @@ class Notes extends Component<StoreProps, State> {
               aria-label="Text of note"
               aria-describedby="button-addon2"
               maxLength={200}
-              value={this.state.newNoteText}
-              onChange={(e) => this.setState({ newNoteText: e.target.value })}
+              value={this.props.noteStore.newNoteText}
+              onChange={(e) =>
+                this.props.noteStore.updateNewNoteText(e.target.value)
+              }
             />
             <div className="input-group-append">
               <button
@@ -186,7 +181,7 @@ class Notes extends Component<StoreProps, State> {
                 type="button"
                 id="button-addon2"
                 onClick={this.onAddNoteHandler}
-                disabled={this.state.newNoteText.trim().length === 0}
+                disabled={this.props.noteStore.newNoteText.trim().length === 0}
               >
                 Add note
               </button>
@@ -213,5 +208,4 @@ class Notes extends Component<StoreProps, State> {
   }
 }
 
-//export default connect(mapStateToProps, mapDispatchToProps)(Notes);
 export default Notes;

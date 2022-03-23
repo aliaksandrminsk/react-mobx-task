@@ -3,37 +3,6 @@ import { FilterTypes } from "./FilterTypes";
 import { inject, observer } from "mobx-react";
 import { INote, NoteStore } from "../../store/NoteStore";
 
-// interface OwnProps {
-//   getFilteredNotes: (filter: string) => Array<INote>;
-// }
-//
-// interface DispatchProps {
-//   removeNote: (id: string) => void;
-//   changeNote: (id: string) => void;
-// }
-// interface StateProps {
-//   updatedNotes: Array<INote>;
-//   filter: string;
-// }
-
-// type Props = StateProps & DispatchProps & OwnProps;
-//
-// function mapStateToProps(state: ApplicationState): StateProps {
-//   return {
-//     filter: state.note.filter,
-//     updatedNotes: state.note.updatedNotes,
-//   };
-// }
-//
-// function mapDispatchToProps(
-//   dispatch: ThunkDispatch<ApplicationState, unknown, NoteAction>
-// ): DispatchProps {
-//   return {
-//     changeNote: (id: string) => dispatch(changeNote(id)),
-//     removeNote: (id: string) => dispatch(removeNote(id)),
-//   };
-// }
-
 type StoreProps = {
   noteStore: NoteStore;
 };
@@ -109,5 +78,4 @@ class NoteTable extends Component<Props> {
   }
 }
 
-//export default connect(mapStateToProps, mapDispatchToProps)(NoteTable);
 export default NoteTable;

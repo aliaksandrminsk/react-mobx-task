@@ -17,6 +17,7 @@ export class NoteStore {
   loading = false;
   errorMessage = "";
   filter = "all";
+  newNoteText = "";
 
   constructor(rootStore: RootStore) {
     makeObservable(this, {
@@ -25,6 +26,7 @@ export class NoteStore {
       loading: observable,
       errorMessage: observable,
       filter: observable,
+      newNoteText: observable,
       changeNote: action,
       addNote: action,
       setFilter: action,
@@ -89,6 +91,10 @@ export class NoteStore {
     }
   };
 
+  updateNewNoteText = (value: string) => {
+    this.newNoteText = value;
+  };
+
   changeNote = (id: string) => {
     this.updatedNotes.forEach((item, index) => {
       if (item.id === id) {
@@ -141,7 +147,7 @@ export class NoteStore {
   };
 
   saveNotesSuccess = (updatedNotes: Array<INote>) => {
-    this.notes = updatedNotes;
+    this.notes = [...updatedNotes];
     this.errorMessage = "";
   };
 

@@ -50,8 +50,18 @@ class App extends Component<StoreProps> {
   render() {
     let routes = (
       <Routes>
-        <Route path="register" element={<RegisterForm />} />
-        <Route path="login" element={<LoginForm />} />
+        <Route
+          path="register"
+          element={
+            <RegisterForm formStore={this.props.authStore.registerFormStore} />
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <LoginForm formStore={this.props.authStore.loginFormStore} />
+          }
+        />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     );

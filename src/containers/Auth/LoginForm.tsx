@@ -1,68 +1,50 @@
 import React from "react";
 import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
-import { IFormControls } from "./IFormControl";
 import { Form } from "./Form";
 import { inject, observer } from "mobx-react";
-import { AuthStore } from "../../store/AuthStore";
-
-// interface DispatchProps {
-//   auth: (email: string, password: string) => Promise<void>;
-// }
-//
-// function mapDispatchToProps(
-//   dispatch: ThunkDispatch<ApplicationState, unknown, AuthAction>
-// ): DispatchProps {
-//   return {
-//     auth: (email: string, password: string) => dispatch(auth(email, password)),
-//   };
-// }
-
-type StoreProps = {
-  authStore: AuthStore;
-};
+import { runInAction } from "mobx";
 
 @inject("authStore")
 @observer
-class LoginForm extends Form<StoreProps, IFormControls> {
-  static defaultProps = {} as StoreProps;
-
-  state = {
-    isFormValid: false,
-    serverErrorMessage: "",
-    formControls: {
-      email: {
-        value: "",
-        type: "email",
-        label: "Email",
-        errorMessage: "Please enter a valid email address",
-        valid: false,
-        touched: false,
-        validation: {
-          required: true,
-          email: true,
+class LoginForm extends Form {
+  componentDidMount() {
+    runInAction(() => {
+      const formControls = {
+        email: {
+          value: "",
+          type: "email",
+          label: "Email",
+          errorMessage: "Please enter a valid email address",
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            email: true,
+          },
         },
-      },
-      password: {
-        value: "",
-        type: "password",
-        label: "Password",
-        errorMessage: "Please enter a correct password",
-        valid: false,
-        touched: false,
-        validation: {
-          required: true,
-          minLength: 6,
+        password: {
+          value: "",
+          type: "password",
+          label: "Password",
+          errorMessage: "Please enter a correct password",
+          valid: false,
+          touched: false,
+          validation: {
+            required: true,
+            minLength: 6,
+          },
         },
-      },
-    },
-  };
+      };
+      this.props.formStore.formControls = formControls;
+    });
+  }
 
   loginHandler = () =>
     this.props.authStore
       .auth(
-        this.state.formControls.email.value,
-        this.state.formControls.password.value
+        this.props.formStore.formControls.email.value,
+        this.props.formStore.formControls.password.value
       )
       .catch(({ response }) => {
         let serverErrorMessage = "";
@@ -78,9 +60,8 @@ class LoginForm extends Form<StoreProps, IFormControls> {
           default:
             serverErrorMessage = "Something went wrong. Try again.";
         }
-        this.setState({
-          ...this.state,
-          serverErrorMessage,
+        runInAction(() => {
+          this.props.formStore.serverErrorMessage = serverErrorMessage;
         });
         console.error("An unexpected error happened:", response?.data);
       });
@@ -96,13 +77,13 @@ class LoginForm extends Form<StoreProps, IFormControls> {
 
             <Button
               onClick={this.loginHandler}
-              disabled={!this.state.isFormValid}
+              disabled={!this.props.formStore.isFormValid}
             >
               Next
             </Button>
-            {this.state.serverErrorMessage.trim().length > 0 ? (
+            {this.props.formStore.serverErrorMessage.trim().length > 0 ? (
               <div className={classes.Error}>
-                {this.state.serverErrorMessage}
+                {this.props.formStore.serverErrorMessage}
               </div>
             ) : null}
           </form>

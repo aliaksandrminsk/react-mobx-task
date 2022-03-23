@@ -1,9 +1,5 @@
 export interface IFormControls {
-  isFormValid: boolean;
-  serverErrorMessage: string;
-  formControls: {
-    [key: string]: IFormControl;
-  };
+  [key: string]: IFormControl;
 }
 
 export interface IFormControl {
