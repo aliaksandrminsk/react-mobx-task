@@ -7,48 +7,6 @@ import NoteTable from "./NoteTable";
 import { INote, NoteStore } from "../../store/NoteStore";
 import { inject, observer } from "mobx-react";
 
-// interface State {
-//   newNoteText: string;
-// }
-/*
-interface DispatchProps {
-  fetchNotes: () => void;
-  saveNotes: () => void;
-  addNote: (note: INote) => void;
-  setFilter: (filter: string) => void;
-}
-
-interface StateProps {
-  notes: Array<INote>;
-  updatedNotes: Array<INote>;
-  loading: boolean;
-  errorMessage: string;
-  filter: string;
-}
-
-type Props = StateProps & DispatchProps;
-
-function mapStateToProps(state: ApplicationState): StateProps {
-  return {
-    notes: state.note.notes,
-    updatedNotes: state.note.updatedNotes,
-    loading: state.note.loading,
-    errorMessage: state.note.errorMessage,
-    filter: state.note.filter,
-  };
-}
-
-function mapDispatchToProps(
-  dispatch: ThunkDispatch<ApplicationState, unknown, NoteAction>
-): DispatchProps {
-  return {
-    fetchNotes: () => dispatch(fetchNotes()),
-    saveNotes: () => dispatch(saveNotes()),
-    addNote: (note: INote) => dispatch(addNote(note)),
-    setFilter: (filter: string) => dispatch(setFilter(filter)),
-  };
-}*/
-
 type StoreProps = {
   noteStore: NoteStore;
 };
@@ -191,7 +149,7 @@ class Notes extends Component<StoreProps> {
           <div className="d-flex justify-content-center">
             <button
               type="button"
-              onClick={this.props.noteStore.saveNotes.bind(this)}
+              onClick={this.props.noteStore.saveNotes}
               className={"btn btn-primary " + classes.saveButton}
               disabled={isEqual(
                 this.props.noteStore.notes,

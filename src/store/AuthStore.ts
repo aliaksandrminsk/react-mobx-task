@@ -1,10 +1,4 @@
-import {
-  observable,
-  action,
-  computed,
-  runInAction,
-  makeObservable,
-} from "mobx";
+import { observable, action, computed, makeObservable } from "mobx";
 import axios from "axios";
 import { encodeEmail } from "../lib/encodeEmail";
 import { FormStore } from "./FormStore";
@@ -125,12 +119,6 @@ export class AuthStore {
     this.token = token;
     this.email = email;
     this.userName = userName;
-
-    runInAction(() => {
-      this.token = token;
-      this.email = email;
-      this.userName = userName;
-    });
   };
 
   logout = () => {

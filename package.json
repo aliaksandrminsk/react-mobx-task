@@ -30,8 +30,6 @@
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "stats": "cross-env STATS=server npm run build",
-    "test": "jest",
-    "test:watch": "npm test -- --watch",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -42,14 +40,9 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "autoprefixer": "^10.4.2",
-    "babel-jest": "^27.5.1",
     "babel-loader": "^8.2.3",
     "bootstrap": "^4.6.1",
     "clean-webpack-plugin": "^4.0.0",
@@ -63,8 +56,6 @@
     "eslint-webpack-plugin": "^3.1.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
-    "jest": "^27.5.1",
-    "jest-css-modules": "^2.1.0",
     "lint-staged": "^12.3.1",
     "mini-css-extract-plugin": "^2.5.2",
     "node-sass": "^7.0.1",
@@ -74,7 +65,6 @@
     "sass-loader": "^12.4.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.0",
-    "ts-jest": "^27.1.3",
     "webpack": "^5.67.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
@@ -83,25 +73,5 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix",
     "*.{ts,tsx,css,md}": "prettier --write"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx$",
-    "moduleNameMapper": {
-      "\\.(css|scss)$": "jest-css-modules"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "setupFilesAfterEnv": [
-      "./setupTests.ts"
-    ]
   }
 }

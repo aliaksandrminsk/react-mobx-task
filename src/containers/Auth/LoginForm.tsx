@@ -9,35 +9,33 @@ import { runInAction } from "mobx";
 @observer
 class LoginForm extends Form {
   componentDidMount() {
-    runInAction(() => {
-      const formControls = {
-        email: {
-          value: "",
-          type: "email",
-          label: "Email",
-          errorMessage: "Please enter a valid email address",
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            email: true,
-          },
+    const formControls = {
+      email: {
+        value: "",
+        type: "email",
+        label: "Email",
+        errorMessage: "Please enter a valid email address",
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          email: true,
         },
-        password: {
-          value: "",
-          type: "password",
-          label: "Password",
-          errorMessage: "Please enter a correct password",
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            minLength: 6,
-          },
+      },
+      password: {
+        value: "",
+        type: "password",
+        label: "Password",
+        errorMessage: "Please enter a correct password",
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          minLength: 6,
         },
-      };
-      this.props.formStore.formControls = formControls;
-    });
+      },
+    };
+    this.props.formStore.formControls = formControls;
   }
 
   loginHandler = () =>
@@ -60,9 +58,7 @@ class LoginForm extends Form {
           default:
             serverErrorMessage = "Something went wrong. Try again.";
         }
-        runInAction(() => {
-          this.props.formStore.serverErrorMessage = serverErrorMessage;
-        });
+        this.props.formStore.serverErrorMessage = serverErrorMessage;
         console.error("An unexpected error happened:", response?.data);
       });
 

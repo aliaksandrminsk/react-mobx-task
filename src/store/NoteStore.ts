@@ -27,6 +27,8 @@ export class NoteStore {
       errorMessage: observable,
       filter: observable,
       newNoteText: observable,
+      saveNotes: action,
+      updateNewNoteText: action,
       changeNote: action,
       addNote: action,
       setFilter: action,

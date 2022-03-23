@@ -3,58 +3,55 @@ import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
 import { Form } from "./Form";
 import { inject, observer } from "mobx-react";
-import { runInAction } from "mobx";
 
 @inject("authStore")
 @observer
 class RegisterForm extends Form {
   componentDidMount() {
-    runInAction(() => {
-      const formControls = {
-        email: {
-          value: "",
-          type: "email",
-          label: "Email",
-          errorMessage: "Please enter a valid email address",
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            email: true,
-          },
+    const formControls = {
+      email: {
+        value: "",
+        type: "email",
+        label: "Email",
+        errorMessage: "Please enter a valid email address",
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          email: true,
         },
-        password: {
-          value: "",
-          type: "password",
-          label: "Password",
-          errorMessage: "Please enter a correct password",
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            minLength: 6,
-          },
+      },
+      password: {
+        value: "",
+        type: "password",
+        label: "Password",
+        errorMessage: "Please enter a correct password",
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          minLength: 6,
         },
-        name: {
-          value: "",
-          type: "input",
-          label: "Name",
-          errorMessage: "Please enter your name",
-          valid: false,
-          touched: false,
-          validation: {
-            required: true,
-            minLength: 2,
-          },
+      },
+      name: {
+        value: "",
+        type: "input",
+        label: "Name",
+        errorMessage: "Please enter your name",
+        valid: false,
+        touched: false,
+        validation: {
+          required: true,
+          minLength: 2,
         },
-        surname: {
-          value: "",
-          type: "input",
-          label: "Surname",
-        },
-      };
-      this.props.formStore.formControls = formControls;
-    });
+      },
+      surname: {
+        value: "",
+        type: "input",
+        label: "Surname",
+      },
+    };
+    this.props.formStore.formControls = formControls;
   }
 
   registerHandler = () =>
@@ -74,9 +71,7 @@ class RegisterForm extends Form {
           default:
             serverErrorMessage = "Something went wrong. Try again.";
         }
-        runInAction(() => {
-          this.props.formStore.serverErrorMessage = serverErrorMessage;
-        });
+        this.props.formStore.serverErrorMessage = serverErrorMessage;
         console.error("An unexpected error happened:", response?.data);
       });
 

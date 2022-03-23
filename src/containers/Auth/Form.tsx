@@ -1,9 +1,8 @@
-import { IFormControls, IFormControl, IValidation } from "./IFormControls";
+import { IFormControl, IValidation } from "./IFormControls";
 import is from "is_js";
 import React, { Component } from "react";
 import Input, { InputProps } from "../../components/UI/Input/Input";
 import { AuthStore } from "../../store/AuthStore";
-import { runInAction } from "mobx";
 import { FormStore } from "../../store/FormStore";
 
 type StoreProps = {
@@ -44,20 +43,14 @@ export class Form extends Component<StoreProps> {
     event: React.ChangeEvent<HTMLInputElement>,
     controlName: string
   ) => {
-    const formControls: IFormControls = {
-      ...this.props.formStore.formControls,
-    };
-
-    const control: IFormControl = { ...formControls[controlName] };
+    const formControls = this.props.formStore.formControls;
+    const control: IFormControl = formControls[controlName];
 
     control.value = event.target.value;
-
     if (control.validation) {
       control.touched = true;
       control.valid = this.validateControl(control.value, control.validation);
     }
-
-    formControls[controlName] = control;
 
     let isFormValid = true;
 
@@ -68,17 +61,8 @@ export class Form extends Component<StoreProps> {
       }
     });
 
-    // this.setState({
-    //...this.state,
-    //serverErrorMessage: "",
-    //formControls,
-    //isFormValid,
-    //});
-    runInAction(() => {
-      this.props.formStore.isFormValid = isFormValid;
-      this.props.formStore.serverErrorMessage = "";
-      this.props.formStore.formControls = formControls;
-    });
+    this.props.formStore.isFormValid = isFormValid;
+    this.props.formStore.serverErrorMessage = "";
   };
 
   renderInputs() {

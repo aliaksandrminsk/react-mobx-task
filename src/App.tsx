@@ -9,31 +9,6 @@ import { inject, IWrappedComponent, observer } from "mobx-react";
 import { AuthStore } from "./store/AuthStore";
 import Logout from "./components/Logout/Logout";
 
-/*
-interface DispatchProps {
-  autoLogin: () => Promise<void>;
-}
-
-interface StateProps {
-  isAuthenticated: boolean;
-  email: string;
-}
-
-function mapStateToProps(state: ApplicationState): StateProps {
-  return {
-    isAuthenticated: !!state.auth.token,
-    email: state.auth.email,
-  };
-}
-
-function mapDispatchToProps(
-  dispatch: ThunkDispatch<ApplicationState, unknown, AnyAction>
-): DispatchProps {
-  return {
-    autoLogin: () => dispatch(autoLogin()),
-  };
-}*/
-
 type StoreProps = {
   authStore: AuthStore;
 };
