@@ -3,7 +3,6 @@ import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
 import { Form } from "./Form";
 import { inject, observer } from "mobx-react";
-import { runInAction } from "mobx";
 
 @inject("authStore")
 @observer
