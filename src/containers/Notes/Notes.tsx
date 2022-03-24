@@ -6,6 +6,7 @@ import { FilterTypes } from "./FilterTypes";
 import NoteTable from "./NoteTable";
 import { INote, NoteStore } from "../../store/NoteStore";
 import { inject, observer } from "mobx-react";
+import AddNewNote from "./AddNewNote";
 
 type StoreProps = {
   noteStore: NoteStore;
@@ -14,7 +15,6 @@ type StoreProps = {
 @inject("noteStore")
 @observer
 class Notes extends Component<StoreProps> {
-  noteCounter = 0; //This counter uses to make unique id when we are creating new note.
   static defaultProps = {} as StoreProps;
 
   getFilteredNotes = (filter: string): Array<INote> => {
@@ -26,17 +26,6 @@ class Notes extends Component<StoreProps> {
       }
       return true;
     });
-  };
-
-  onAddNoteHandler = () => {
-    const note: INote = {
-      id: "id" + (this.props.noteStore.notes.length + this.noteCounter),
-      text: this.props.noteStore.newNoteText,
-      done: false,
-    };
-    this.props.noteStore.addNote(note);
-    this.props.noteStore.updateNewNoteText("");
-    this.noteCounter++;
   };
 
   componentDidMount() {
@@ -120,31 +109,9 @@ class Notes extends Component<StoreProps> {
           )}
 
           <br />
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Text of note"
-              aria-label="Text of note"
-              aria-describedby="button-addon2"
-              maxLength={200}
-              value={this.props.noteStore.newNoteText}
-              onChange={(e) =>
-                this.props.noteStore.updateNewNoteText(e.target.value)
-              }
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-primary"
-                type="button"
-                id="button-addon2"
-                onClick={this.onAddNoteHandler}
-                disabled={this.props.noteStore.newNoteText.trim().length === 0}
-              >
-                Add note
-              </button>
-            </div>
-          </div>
+
+          <AddNewNote noteStore={this.props.noteStore} />
+
           <br />
           <div className="d-flex justify-content-center">
             <button

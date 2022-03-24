@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import Input, { InputProps } from "../../components/UI/Input/Input";
 import { AuthStore } from "../../store/AuthStore";
 import { FormStore } from "../../store/FormStore";
+import { runInAction } from "mobx";
 
 type StoreProps = {
   authStore: AuthStore;
@@ -45,24 +46,25 @@ export class Form extends Component<StoreProps> {
   ) => {
     const formControls = this.props.formStore.formControls;
     const control: IFormControl = formControls[controlName];
-
-    control.value = event.target.value;
-    if (control.validation) {
-      control.touched = true;
-      control.valid = this.validateControl(control.value, control.validation);
-    }
-
-    let isFormValid = true;
-
-    Object.keys(formControls).forEach((name) => {
-      const valid = formControls[name].valid;
-      if (valid != null) {
-        isFormValid = valid && isFormValid;
+    runInAction(() => {
+      control.value = event.target.value;
+      if (control.validation) {
+        control.touched = true;
+        control.valid = this.validateControl(control.value, control.validation);
       }
-    });
 
-    this.props.formStore.isFormValid = isFormValid;
-    this.props.formStore.serverErrorMessage = "";
+      let isFormValid = true;
+
+      Object.keys(formControls).forEach((name) => {
+        const valid = formControls[name].valid;
+        if (valid != null) {
+          isFormValid = valid && isFormValid;
+        }
+      });
+
+      this.props.formStore.isFormValid = isFormValid;
+      this.props.formStore.serverErrorMessage = "";
+    });
   };
 
   renderInputs() {

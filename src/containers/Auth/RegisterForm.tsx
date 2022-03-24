@@ -3,6 +3,7 @@ import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
 import { Form } from "./Form";
 import { inject, observer } from "mobx-react";
+import { runInAction } from "mobx";
 
 @inject("authStore")
 @observer
@@ -51,7 +52,9 @@ class RegisterForm extends Form {
         label: "Surname",
       },
     };
-    this.props.formStore.formControls = formControls;
+    runInAction(() => {
+      this.props.formStore.formControls = formControls;
+    });
   }
 
   registerHandler = () =>
@@ -71,7 +74,9 @@ class RegisterForm extends Form {
           default:
             serverErrorMessage = "Something went wrong. Try again.";
         }
-        this.props.formStore.serverErrorMessage = serverErrorMessage;
+        runInAction(() => {
+          this.props.formStore.serverErrorMessage = serverErrorMessage;
+        });
         console.error("An unexpected error happened:", response?.data);
       });
 

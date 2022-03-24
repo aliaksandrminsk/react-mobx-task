@@ -17,7 +17,6 @@ export class NoteStore {
   loading = false;
   errorMessage = "";
   filter = "all";
-  newNoteText = "";
 
   constructor(rootStore: RootStore) {
     makeObservable(this, {
@@ -26,9 +25,7 @@ export class NoteStore {
       loading: observable,
       errorMessage: observable,
       filter: observable,
-      newNoteText: observable,
       saveNotes: action,
-      updateNewNoteText: action,
       changeNote: action,
       addNote: action,
       setFilter: action,
@@ -91,10 +88,6 @@ export class NoteStore {
       this.saveNotesError("Something went wrong. Try again!");
       console.error("An unexpected error happened:", error);
     }
-  };
-
-  updateNewNoteText = (value: string) => {
-    this.newNoteText = value;
   };
 
   changeNote = (id: string) => {
