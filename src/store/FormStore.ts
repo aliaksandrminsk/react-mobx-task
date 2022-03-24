@@ -1,16 +1,11 @@
-import { makeObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { IFormControls } from "../containers/Auth/IFormControls";
 
-export class FormStore {
-  isFormValid = false;
-  serverErrorMessage = "";
-  formControls: IFormControls = {};
+const FormStore = () =>
+  makeAutoObservable({
+    isFormValid: false,
+    serverErrorMessage: "",
+    formControls: {} as IFormControls,
+  });
 
-  constructor() {
-    makeObservable(this, {
-      formControls: observable,
-      isFormValid: observable,
-      serverErrorMessage: observable,
-    });
-  }
-}
+export default FormStore;
