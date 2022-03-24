@@ -1,15 +1,15 @@
 import { observable, action, computed, makeObservable } from "mobx";
 import axios from "axios";
 import { encodeEmail } from "../lib/encodeEmail";
-import { FormStore } from "./FormStore";
+import FormStore from "./FormStore";
 
 export class AuthStore {
   token: string | null = null;
   email = "";
   userName = "";
 
-  loginFormStore = new FormStore();
-  registerFormStore = new FormStore();
+  loginFormStore = FormStore();
+  registerFormStore = FormStore();
 
   constructor() {
     makeObservable(this, {
