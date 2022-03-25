@@ -132,7 +132,7 @@ const Notes = () => {
         <div className="d-flex justify-content-center">
           <button
             type="button"
-            onClick={noteStore.saveNotes}
+            onClick={() => noteStore.saveNotes()}
             className={"btn btn-primary " + classes.saveButton}
             disabled={isEqual(noteStore.notes, noteStore.updatedNotes)}
           >

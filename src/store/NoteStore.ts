@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from "mobx";
+import { observable, action, makeObservable, flow } from "mobx";
 import axios from "axios";
 import { encodeEmail } from "../lib/encodeEmail";
 import { AuthStore } from "./AuthStore";
@@ -25,7 +25,7 @@ export class NoteStore {
       loading: observable,
       errorMessage: observable,
       filter: observable,
-      saveNotes: action,
+      saveNotes: flow,
       changeNote: action,
       addNote: action,
       setFilter: action,
@@ -39,7 +39,7 @@ export class NoteStore {
     this.authStore = authStore;
   }
 
-  saveNotes = async () => {
+  *saveNotes() {
     const { email } = this.authStore;
     const notes: Array<INote> = this.updatedNotes;
 
@@ -51,7 +51,7 @@ export class NoteStore {
         data[item.id] = { text: item.text, done: item.done };
         counter++;
       }
-      await axios.put(
+      yield axios.put(
         `${process.env.AXIOS_BASE_URL}/users/${encodeEmail(email)}/data.json/`,
         data
       );
@@ -61,7 +61,7 @@ export class NoteStore {
       this.saveNotesError("Something went wrong. Try again!");
       console.error("An unexpected error happened:", error);
     }
-  };
+  }
 
   changeNote = (id: string) => {
     this.updatedNotes.forEach((item, index) => {
