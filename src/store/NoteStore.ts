@@ -1,7 +1,7 @@
 import { observable, action, makeObservable } from "mobx";
-import { RootStore } from "./index";
 import axios from "axios";
 import { encodeEmail } from "../lib/encodeEmail";
+import { AuthStore } from "./AuthStore";
 
 export interface INote {
   id: string;
@@ -10,7 +10,7 @@ export interface INote {
 }
 
 export class NoteStore {
-  private rootStore: RootStore;
+  authStore: { email: string };
 
   notes = new Array<INote>();
   updatedNotes = new Array<INote>();
@@ -18,7 +18,7 @@ export class NoteStore {
   errorMessage = "";
   filter = "all";
 
-  constructor(rootStore: RootStore) {
+  constructor(authStore: AuthStore) {
     makeObservable(this, {
       notes: observable,
       updatedNotes: observable,
@@ -36,38 +36,11 @@ export class NoteStore {
       saveNotesSuccess: action,
       saveNotesError: action,
     });
-    this.rootStore = rootStore;
+    this.authStore = authStore;
   }
 
-  fetchNotes = async () => {
-    const { email } = this.rootStore.authStore;
-    this.fetchNotesStart();
-
-    try {
-      const response = await axios.get(
-        `${process.env.AXIOS_BASE_URL}/users/${encodeEmail(email)}/data.json`
-      );
-
-      const notes: Array<INote> = [];
-      let counter = 0;
-      if (response.data != null) {
-        for (const value of Object.values(response.data)) {
-          notes.push({
-            id: "id" + counter++,
-            text: (value as INote).text,
-            done: (value as INote).done,
-          });
-        }
-      }
-      this.fetchNotesSuccess(notes);
-    } catch (error) {
-      this.fetchNotesError("Error occurred. It appears something is broken.");
-      console.error("An unexpected error happened:", error);
-    }
-  };
-
   saveNotes = async () => {
-    const { email } = this.rootStore.authStore;
+    const { email } = this.authStore;
     const notes: Array<INote> = this.updatedNotes;
 
     try {

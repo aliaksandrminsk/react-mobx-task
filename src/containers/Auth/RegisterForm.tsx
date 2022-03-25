@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import classes from "./Auth.module.css";
 import Button from "../../components/UI/Button/Button";
-import { Form } from "./Form";
-import { inject, observer } from "mobx-react";
+import { renderInputs, submitFormHandler } from "./Form";
+import { observer } from "mobx-react-lite";
 import { runInAction } from "mobx";
+import { IFormStore } from "../../store/FormStore";
+import { useStore } from "../../store";
 
-@inject("authStore")
-@observer
-class RegisterForm extends Form {
-  componentDidMount() {
+const RegisterForm = (props: { formStore: IFormStore }) => {
+  const { authStore } = useStore();
+
+  useLayoutEffect(() => {
     const formControls = {
       email: {
         value: "",
@@ -53,17 +55,17 @@ class RegisterForm extends Form {
       },
     };
     runInAction(() => {
-      this.props.formStore.formControls = formControls;
+      props.formStore.formControls = formControls;
     });
-  }
+  }, []);
 
-  registerHandler = () =>
-    this.props.authStore
+  const registerHandler = () =>
+    authStore
       .auth(
-        this.props.formStore.formControls.email.value,
-        this.props.formStore.formControls.password.value,
-        this.props.formStore.formControls.name.value,
-        this.props.formStore.formControls.surname.value
+        props.formStore.formControls.email.value,
+        props.formStore.formControls.password.value,
+        props.formStore.formControls.name.value,
+        props.formStore.formControls.surname.value
       )
       .catch(({ response }) => {
         let serverErrorMessage = "";
@@ -75,35 +77,33 @@ class RegisterForm extends Form {
             serverErrorMessage = "Something went wrong. Try again.";
         }
         runInAction(() => {
-          this.props.formStore.serverErrorMessage = serverErrorMessage;
+          props.formStore.serverErrorMessage = serverErrorMessage;
         });
         console.error("An unexpected error happened:", response?.data);
       });
 
-  render() {
-    return (
-      <div className="d-flex justify-content-center flex-grow-1 pt-5">
-        <div className="w-100 px-1" style={{ maxWidth: "600px" }}>
-          <h2 className="text-center mb-5">Create account</h2>
+  return (
+    <div className="d-flex justify-content-center flex-grow-1 pt-5">
+      <div className="w-100 px-1" style={{ maxWidth: "600px" }}>
+        <h2 className="text-center mb-5">Create account</h2>
 
-          <form onSubmit={this.submitHandler} className={classes.AuthForm}>
-            {this.renderInputs()}
-            <Button
-              onClick={this.registerHandler}
-              disabled={!this.props.formStore.isFormValid}
-            >
-              Next
-            </Button>
-            {this.props.formStore.serverErrorMessage.trim().length > 0 ? (
-              <div className={classes.Error}>
-                {this.props.formStore.serverErrorMessage}
-              </div>
-            ) : null}
-          </form>
-        </div>
+        <form onSubmit={submitFormHandler} className={classes.AuthForm}>
+          {renderInputs(props.formStore)}
+          <Button
+            onClick={registerHandler}
+            disabled={!props.formStore.isFormValid}
+          >
+            Next
+          </Button>
+          {props.formStore.serverErrorMessage.trim().length > 0 ? (
+            <div className={classes.Error}>
+              {props.formStore.serverErrorMessage}
+            </div>
+          ) : null}
+        </form>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default RegisterForm;
+export default observer(RegisterForm);

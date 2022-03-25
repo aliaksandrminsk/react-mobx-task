@@ -1,57 +1,45 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import Layout from "./hoc/Layout/Layout";
 import { Route, Routes } from "react-router-dom";
 import LoginForm from "./containers/Auth/LoginForm";
 import RegisterForm from "./containers/Auth/RegisterForm";
 import Notes from "./containers/Notes/Notes";
 import { Navigate } from "react-router-dom";
-import { inject, IWrappedComponent, observer } from "mobx-react";
-import { AuthStore } from "./store/AuthStore";
+import { observer } from "mobx-react-lite";
 import Logout from "./components/Logout/Logout";
+import { useStore } from "./store";
 
-type StoreProps = {
-  authStore: AuthStore;
-};
+const App = () => {
+  const { authStore } = useStore();
 
-@inject("authStore")
-@observer
-class App extends Component<StoreProps> {
-  static defaultProps = {} as StoreProps;
+  useEffect(() => {
+    authStore.autoLogin();
+  }, []);
 
-  componentDidMount() {
-    this.props.authStore.autoLogin();
-  }
+  let routes = (
+    <Routes>
+      <Route
+        path="register"
+        element={<RegisterForm formStore={authStore.registerFormStore} />}
+      />
+      <Route
+        path="login"
+        element={<LoginForm formStore={authStore.loginFormStore} />}
+      />
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
+  );
 
-  render() {
-    let routes = (
+  if (authStore.isAuthenticated) {
+    routes = (
       <Routes>
-        <Route
-          path="register"
-          element={
-            <RegisterForm formStore={this.props.authStore.registerFormStore} />
-          }
-        />
-        <Route
-          path="login"
-          element={
-            <LoginForm formStore={this.props.authStore.loginFormStore} />
-          }
-        />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="list" element={<Notes />} />
+        <Route path="logout" element={<Logout />} />
+        <Route path="*" element={<Navigate to="/list" />} />
       </Routes>
     );
-
-    if (this.props.authStore.isAuthenticated) {
-      routes = (
-        <Routes>
-          <Route path="list" element={<Notes />} />
-          <Route path="logout" element={<Logout />} />
-          <Route path="*" element={<Navigate to="/list" />} />
-        </Routes>
-      );
-    }
-    return <Layout>{routes}</Layout>;
   }
-}
+  return <Layout>{routes}</Layout>;
+};
 
-export default App as typeof App & IWrappedComponent<StoreProps>;
+export default observer(App);

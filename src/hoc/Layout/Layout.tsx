@@ -1,31 +1,23 @@
-import React, { Component, ReactChild, ReactChildren } from "react";
+import React, { ReactChild, ReactChildren } from "react";
 import Menu from "../../components/Menu/Menu";
-import { AuthStore } from "../../store/AuthStore";
-import { inject, observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../store";
 
-type StoreProps = {
-  authStore: AuthStore;
-};
-
-interface Props extends StoreProps {
+interface Props {
   children: ReactChild | ReactChildren;
 }
 
-@inject("authStore")
-@observer
-class Layout extends Component<Props> {
-  static defaultProps = {} as StoreProps;
-  render() {
-    return (
-      <>
-        <Menu
-          isAuthenticated={this.props.authStore.isAuthenticated}
-          userName={this.props.authStore.userName}
-        />
-        <main>{this.props.children}</main>
-      </>
-    );
-  }
-}
+const Layout = (props: Props) => {
+  const { authStore } = useStore();
+  return (
+    <>
+      <Menu
+        isAuthenticated={authStore.isAuthenticated}
+        userName={authStore.userName}
+      />
+      <main>{props.children}</main>
+    </>
+  );
+};
 
-export default Layout;
+export default observer(Layout);

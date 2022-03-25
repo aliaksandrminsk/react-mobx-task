@@ -1,23 +1,16 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { inject, observer } from "mobx-react";
-import { AuthStore } from "../../store/AuthStore";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../store";
 
-type StoreProps = {
-  authStore: AuthStore;
+const Logout = () => {
+  const { authStore } = useStore();
+
+  useEffect(() => {
+    authStore.logout();
+  }, []);
+
+  return <Navigate to="/login" replace />;
 };
 
-@inject("authStore")
-@observer
-class Logout extends Component<StoreProps> {
-  static defaultProps = {} as StoreProps;
-  componentDidMount() {
-    return this.props.authStore.logout();
-  }
-
-  render() {
-    return <Navigate to="/login" replace />;
-  }
-}
-
-export default Logout;
+export default observer(Logout);
