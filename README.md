@@ -1,6 +1,6 @@
 # React-MobX Example
 
-This project is a to-do list with authorization. Technologies: [MobX](https://mobx.js.org/README.html), [TypeScript](https://www.typescriptlang.org/) and [Webpack](https://webpack.js.org/).
+This project is a to-do list with authorization. Technologies: [React Hooks](https://reactjs.org/), [MobX](https://mobx.js.org/README.html), [TypeScript](https://www.typescriptlang.org/) and [Webpack](https://webpack.js.org/).
 
 To run the package.
 
