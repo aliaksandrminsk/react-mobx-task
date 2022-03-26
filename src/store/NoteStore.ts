@@ -77,6 +77,7 @@ export class NoteStore {
   };
 
   addNote = (note: INote) => {
+    if (note.text === "") return;
     this.errorMessage = "";
     this.updatedNotes.push(note);
   };

@@ -11,5 +11,11 @@ npm install
 npm run start
 ```
 
+To run tests.
+
+```
+npm run test
+```
+
 [React-MobX Example
 ](https://react-mobx-task.web.app/)

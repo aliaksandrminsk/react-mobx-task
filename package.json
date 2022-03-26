@@ -27,9 +27,19 @@
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "stats": "cross-env STATS=server npm run build",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
+    "jest": "^27.5.1",
+    "jest-css-modules": "^2.1.0",
+    "ts-jest": "^27.1.3",
+    "babel-jest": "^27.5.1",
     "@babel/core": "^7.17.2",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/polyfill": "^7.12.1",
@@ -69,5 +79,25 @@
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix",
     "*.{ts,tsx,css,md}": "prettier --write"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx$",
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "jest-css-modules"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
+    "setupFilesAfterEnv": [
+      "./setupTests.ts"
+    ]
   }
 }
