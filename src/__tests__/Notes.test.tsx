@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Notes from "../containers/Notes/Notes";
+import { Notes } from "../containers/Notes/Notes";
 import axios, { AxiosResponse } from "axios";
-import store, { StoreContext, useStore } from "../store";
-import Layout from "../hoc/Layout/Layout";
+import { AuthStore } from "../store/AuthStore";
+import { NoteStore } from "../store/NoteStore";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
@@ -27,7 +27,10 @@ describe("Note Storage testing", () => {
     };
     // Make the mock return the custom axios response
     mockedAxios.get.mockResolvedValueOnce(mockedResponse);
-    await render(<Notes />);
+
+    const authStore = new AuthStore();
+    const noteStore = new NoteStore(authStore);
+    await render(<Notes store={{ authStore, noteStore }} />);
   });
   it("checks initial state", () => {
     expect(screen.getByText(/All \(3\)/i)).toBeInTheDocument();

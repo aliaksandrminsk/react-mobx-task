@@ -5,7 +5,12 @@ import { createContext, useContext } from "react";
 const authStore = new AuthStore();
 const noteStore = new NoteStore(authStore);
 
-const store = {
+export interface IStore {
+  authStore: AuthStore;
+  noteStore: NoteStore;
+}
+
+const store: IStore = {
   authStore,
   noteStore,
 };

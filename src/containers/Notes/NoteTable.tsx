@@ -1,16 +1,16 @@
 import React from "react";
 import { FilterTypes } from "./FilterTypes";
 import { observer } from "mobx-react-lite";
-import { INote } from "../../store/NoteStore";
-import { useStore } from "../../store";
+import { INote, NoteStore } from "../../store/NoteStore";
 import classes from "./NoteTable.module.css";
 
 interface OwnProps {
   getFilteredNotes: (filter: string) => Array<INote>;
+  noteStore: NoteStore;
 }
 
 const NoteTable = (props: OwnProps) => {
-  const { noteStore } = useStore();
+  const noteStore = props.noteStore;
 
   const renderNotes = () => {
     return props.getFilteredNotes(noteStore.filter).map((note) => {

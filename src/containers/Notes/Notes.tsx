@@ -7,14 +7,14 @@ import NoteTable from "./NoteTable";
 import { INote } from "../../store/NoteStore";
 import { observer } from "mobx-react-lite";
 import AddNewNote from "./AddNewNote";
-import { useStore } from "../../store";
+import { IStore, useStore } from "../../store";
 import axios from "axios";
 import { encodeEmail } from "../../lib/encodeEmail";
 
 type voidFunc = () => void;
 
-const Notes = () => {
-  const { noteStore, authStore } = useStore();
+const Notes = observer((props: { store: IStore }) => {
+  const { authStore, noteStore } = props.store;
 
   const getFilteredNotes = (filter: string): Array<INote> => {
     return noteStore.updatedNotes.filter((value) => {
@@ -121,7 +121,10 @@ const Notes = () => {
         {noteStore.loading ? (
           <Loader />
         ) : (
-          <NoteTable getFilteredNotes={getFilteredNotes} />
+          <NoteTable
+            getFilteredNotes={getFilteredNotes}
+            noteStore={noteStore}
+          />
         )}
 
         <br />
@@ -143,6 +146,11 @@ const Notes = () => {
       </div>
     </div>
   );
+});
+
+const NotesWrapper = () => {
+  return <Notes store={useStore()} />;
 };
 
-export default observer(Notes);
+export { Notes };
+export default NotesWrapper;

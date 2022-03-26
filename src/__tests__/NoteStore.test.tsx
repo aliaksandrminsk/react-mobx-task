@@ -23,6 +23,18 @@ describe("Note store", () => {
       noteStore.updatedNotes.find((t) => t.text === "My note")
     ).toBeDefined();
   });
+  it("remove a note", () => {
+    const note: INote = {
+      id: "id0",
+      text: "My note",
+      done: false,
+    };
+    noteStore.addNote(note);
+    noteStore.removeNote(note.id);
+
+    expect(noteStore.updatedNotes.length).toBe(0);
+  });
+
   it("Change done status", () => {
     const note: INote = {
       id: "id0",
@@ -34,7 +46,7 @@ describe("Note store", () => {
 
     expect(noteStore.updatedNotes[0].done).toBe(true);
   });
-  it("cannot add an empty todo", () => {
+  it("cannot add an empty note", () => {
     const note: INote = {
       id: "id0",
       text: "",
