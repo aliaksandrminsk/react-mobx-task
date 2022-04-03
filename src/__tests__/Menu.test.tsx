@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import Menu from "../components/Menu/Menu";
 import { MemoryRouter } from "react-router-dom";
 
-describe("Render Menu component", () => {
+describe("Menu component", () => {
   it("Registration and list page", () => {
     const { rerender } = render(
       <MemoryRouter>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import classes from "./Notes.module.css";
 import Loader from "../../components/UI/Loader/Loader";
 import { isEqual } from "../../lib/isEqual";
@@ -60,7 +60,10 @@ const Notes = observer((props: { store: IStore }) => {
     fetchNotes();
   }, []);
 
-  const completedNotesCount = getFilteredNotes("completed").length;
+  const completedNotesCount = useMemo<number>(
+    () => getFilteredNotes("completed").length,
+    [noteStore.updatedNotes]
+  );
 
   return (
     <div className="d-flex justify-content-center flex-grow-1 pt-4 pt-sm-5">

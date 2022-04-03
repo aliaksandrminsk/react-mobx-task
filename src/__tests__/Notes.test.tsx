@@ -15,7 +15,7 @@ const hits = [
   { text: "Item2", done: true },
 ];
 
-describe("Note Storage testing", () => {
+describe("Notes component", () => {
   beforeEach(async () => {
     //Prepare the response we want to get from axios
     const mockedResponse: AxiosResponse = {
